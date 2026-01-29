@@ -49,7 +49,7 @@ void NativeRopeContext::load_context(Node2D* rope)
     points = rope->call("get_points");
     oldpoints = rope->call("get_old_points");
     damping_curve = rope->get("damping_curve");
-    gravity = rope->get("gravity");
+    gravity = rope->get("gravity"); // gravity multiplier
     gravity_direction = rope->get("gravity_direction");
     wind = rope->get("wind");
     damping = rope->get("damping");
@@ -132,9 +132,13 @@ void NativeRopeContext::_simulate_velocities(double delta)
     for (int i = first_idx; i < size; ++i)
     {
         const float dampmult = use_damping_curve ? damping_curve->sample_baked(get_point_perc(i, points)) : 1.0f;
+
+		// added this part to allow for multiple gravity directions impact on performance not tested - JJ
+		const Vector2 gravityDirection = rope->call("get_gravity_direction", i);
+
         const Vector2 final_vel = simulation_weights[i] * (
                 damp_vec(velocities[i], damping * dampmult, delta)
-                + gravity_direction * frame_gravity
+                + gravityDirection * frame_gravity
                 );
 
         new_points[i] = points[i] + final_vel;
