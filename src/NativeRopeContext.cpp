@@ -133,6 +133,8 @@ void NativeRopeContext::_simulate_velocities(double delta)
     {
         const float dampmult = use_damping_curve ? damping_curve->sample_baked(get_point_perc(i, points)) : 1.0f;
 
+		// test comment
+
 		// added this part to allow for multiple gravity directions impact on performance not tested - JJ
 		const Vector2 gravityDirection = rope->call("get_gravity_direction", i);
 
